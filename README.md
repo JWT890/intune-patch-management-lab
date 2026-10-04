@@ -64,4 +64,10 @@ After verifying, shut down the VM then click on Machine -> Tools -> Snapshot to 
 ![Snapshot](./pictures/snapshot.png)    
 Then right click on the VM to clone it and set it like this:    
 ![Clone](./pictures/clone.png)  
-Then hit finish and wait for it to appear after cloning.    
+Then hit finish and wait for it to appear after cloning and do the same thing for the third VM from cloning again.  
+After cloning go into each one and rename the Windows machines inside.  
+After changing their names, go into each VM configuration and select the cable connected option and in the VMs go to Settings -> Accounts -> Access work or school and click on the add a work or school account option to get enrolled into Entra ID.  
+Make sure to also go into Windows Updates and pause them for a few weeks so they don't randomly update.   
+Enter in the email for patch, change the password, set up MFA and a PIN and get signed in after restarting, then wait a few minutes to see it pop up in Intune in Devices -> Windows Devices:   
+![Device](./pictures/device.png)    
+With WIN11-PROD in there, do the same for the other VMs and create a snapshot called clean-unpatched.   
