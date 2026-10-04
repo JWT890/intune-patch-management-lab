@@ -43,3 +43,25 @@ After saving them, its time to move on to the VM part of it.
 Create a network in host only networks with it set to 192.168.50.0/24 with DHCP enabled in NAT Networks and have it named PatchLab. 
 Then lets go create the first VM:   
 WIN-11-Test:    
+128 MB of video memory    
+4096 MB of of memory    
+ICH9 chipset    
+Adapter 1 set to PatchLab NAT Network with the virtual cable connected turned off, then start the VM to get it up and go through the setup process and click on install when you get to the screen and then wait a while for Windows 11 LSTC edition to install.    
+After waiting a few:    
+![Oobe](./pictures/oobe.png)    
+Select US and hit next and keep on going till it gets to network:   
+![Network](./pictures/network.png)  
+Since the cable connected option was unticked, select the I don't have internet option. 
+Then name the VM labadmin, set the password and security questions. Then turn off all privacy options and wait for setup.   
+After getting to the desktop, go to Settings -> Systems -> About and click on rename the PC to WIN11-TEST and restart the VM.   
+After restarting, type winver in the search to get the build of the VM iso: 
+![Winver](./pictures/winver.png)    
+Since its showing an older version, go to Update history in Settings -> Windows Update -> Update history to verify: 
+![History1](./pictures/history1.png)    
+And check Control panel by going to Program and Features and click on View installed updates:   
+![History2](./pictures/history2.png)    
+After verifying, shut down the VM then click on Machine -> Tools -> Snapshot to get a snapshot of the VM by click on take and name it pre-join with a description:  
+![Snapshot](./pictures/snapshot.png)    
+Then right click on the VM to clone it and set it like this:    
+![Clone](./pictures/clone.png)  
+Then hit finish and wait for it to appear after cloning.    
