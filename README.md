@@ -70,4 +70,6 @@ After changing their names, go into each VM configuration and select the cable c
 Make sure to also go into Windows Updates and pause them for a few weeks so they don't randomly update.   
 Enter in the email for patch, change the password, set up MFA and a PIN and get signed in after restarting, then wait a few minutes to see it pop up in Intune in Devices -> Windows Devices:   
 ![Device](./pictures/device.png)    
-With WIN11-PROD in there, do the same for the other VMs and create a snapshot called clean-unpatched.   
+With WIN11-PROD in there, do the same for the other VMs and create a snapshot called clean-unpatched for each.  
+After getting them in, should show for each:    
+![Intune1](./pictures/intune1.png)  
