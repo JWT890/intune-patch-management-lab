@@ -73,3 +73,19 @@ Enter in the email for patch, change the password, set up MFA and a PIN and get 
 With WIN11-PROD in there, do the same for the other VMs and create a snapshot called clean-unpatched for each.  
 After getting them in, should show for each:    
 ![Intune1](./pictures/intune1.png)  
+
+# Patch Lifecycle
+Now based off the above image, it shows the three devices with the same version for the baseline, same user, compliant with Intune and no dups. Something to also consider is making a snapshot of the three VMs known as clean-unpatched before moving forward.    
+As part of the patch management lifecycle of the test phase of Identify -> Assess -> Prioritization -> Test -> Monitor/Deployment -> Verification -> Documentation. Start by adding WIN11-TESt to Patch-Test by clicking on Patch-Test -> Manage -> Members then click on Add Members:  
+![Add](./pictures/add.png)  
+Then turn on WIN11-TEST and sign in with the patchlab email and password and go to Settings -> Accounts -> Access work or school, click on manage and sign in and go back to Work or School after a few seconds to see the updated version: 
+![Patch](./pictures/update.png) 
+Then click on info and scroll down to the sync option but it would be good checking dsregcmd /status to what it says:   
+![Azurejoined](./pictures/azurejoined.png)  
+So go delete from Intune and Entra and disconnect from the VM to get rid of it from the system, then after a few minutes, go back to Access work or school and click connect and instead choose the Join this device to Microsoft Entra ID instead and go through the process. Also check with dsregcmd /status to make sure it says Yes to AzureADJoined and AzureADPort after signing in with patchlab email: 
+![Yes1](./pictures/yes1.png)    
+![Yes2](./pictures/yes2.png)    
+![Yes3](./pictures/yes3.png)    
+For the third picture, MdmUrl needs to show a result, which this does.  
+And on Intune:  
+![Status](./pictures/status.png)    
