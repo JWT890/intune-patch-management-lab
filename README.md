@@ -82,7 +82,9 @@ Then turn on WIN11-TEST and sign in with the patchlab email and password and go 
 ![Patch](./pictures/update.png) 
 Then click on info and scroll down to the sync option but it would be good checking dsregcmd /status to what it says:   
 ![Azurejoined](./pictures/azurejoined.png)  
-So go delete from Intune and Entra and disconnect from the VM to get rid of it from the system, then after a few minutes, go back to Access work or school after clicking the alert notification, click disconnect, and click connect and instead choose the Join this device to Microsoft Entra ID instead and go through the process. Also check with dsregcmd /status to make sure it says Yes to AzureADJoined and AzureADPort after signing in with patchlab email: 
+So go delete from Intune and Entra and disconnect from the VM to get rid of it from the system, then after a few minutes, go back to Access work or school after clicking the alert notification, click disconnect, and click connect and instead choose the Join this device to Microsoft Entra ID instead and go through the process. Then go to signin and click on the three dots and click on switch user: 
+![Change](./pictures/change.png)    
+Also check with dsregcmd /status to make sure it says Yes to AzureADJoined and AzureADPort after signing in with patchlab email: 
 ![Yes1](./pictures/yes1.png)    
 ![Yes2](./pictures/yes2.png)    
 ![Yes3](./pictures/yes3.png)    
