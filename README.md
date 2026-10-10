@@ -92,3 +92,13 @@ For the third picture, MdmUrl needs to show a result, which this does.
 And on Intune:  
 ![Status](./pictures/status.png)    
 Do the same for the other two VMs too.  
+Then go to Groups to Patch-Test and add WIN11-TEST to the group and boot it up. 
+And this popped up: 
+![Error](./pictures/error.png)  
+Which pops up after clicking Sign in again to fix your work or school account from here:    
+![Error1](./pictures/error1.webp)   
+Next would be shutting down the VM and going to the motherboard within settings and setting TPM to None.    
+After signing back in disconnect from the domain using the labadmin account and delete from Entra ID and Intune. Then go back through the process by going to Access work or school and clicking on connect to go through the enroll in Entra process, restart and sign in again as patch lab and to make sure that TPM is off, run dsregcmd /status:   
+![TPM](./pictures/TPM.png)  
+Then do the same again for Prod and Pilot.  
+
