@@ -132,4 +132,41 @@ And updates history:
 Since its up to date and the winver version is newer, pause updates for now while also checking in Event Viewer -> Application and Services -> Microsoft -> Windows -> WindowsUpdateClient -> Operational and verifying:    
 ![Log](./pictures/log.png)  
 After pausing, its time to take a snapshot named patched and move on to the next VMs with the snapshot named patched.   
+In both Pilot and Prod VMs check the device sync status for no errors:  
+![Status3](./pictures/status3.png)  
+Lets do the WIN11-TEST first so run to disable new OS update:   
+$k = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"  
+New-Item $k -Force | Out-Null   
+Set-ItemProperty $k TargetReleaseVersion 1 -Type DWord  
+Set-ItemProperty $k ProductVersion "Windows 11" -Type String    
+Set-ItemProperty $k TargetReleaseVersionInfo "24H2" -Type String    
+Restart-Service wuauserv    
+Then run on WIN11-PILOT:    
+$k = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"  
+New-Item "$k\AU" -Force | Out-Null  
+Set-ItemProperty $k WUServer "http://deadwsus.lab.local:8530" -Type String  
+Set-ItemProperty $k WUStatusServer "http://deadwsus.lab.local:8530" -Type String    
+Set-ItemProperty "$k\AU" UseWUServer 1 -Type DWord  
+Restart-Service wuauserv    
+And if after clicking Resume updates it shows updates and starts downloading, run Restart-Service wuauserv and a couple to see this:    
+![Fail](./pictures/fail.png)    
+To investigate more open up admin PowerShell and run:   
+$s = New-Object -ComObject Microsoft.Update.Session 
+$s.CreateUpdateSearcher().Search("IsInstalled=0")   
+Which should output:    
+![Output](./pictures/output.png)    
+Result 3 means no clean failure so run this to get more:    
+$r = $s.CreateUpdateSearcher().Search("IsInstalled=0")  
+$r.ResultCode   
+$r.Updates.Count    
+$r.Warnings | ForEach-Object { $_.Message; $_.HResult } 
+With the output:    
+![Output1](./pictures/output1.png)   
+3 means partial success and the warning of the negative one so run this to get another picture: 
+'{0:X}' -f -2145123272  
+$r.Updates | ForEach-Object { $_.Title }    
+And output: 
+![Output2](./pictures/output2.png)  
+The hex value, when looking it up, says that this is a network connectivity issue despite finding updates. Hex value can also be found in Event Viewer as well within the WindowsUpdateClient:  
+![Error2](./pictures/error2.png)    
 
