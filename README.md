@@ -101,4 +101,35 @@ Next would be shutting down the VM and going to the motherboard within settings 
 After signing back in disconnect from the domain using the labadmin account and delete from Entra ID and Intune. Then go back through the process by going to Access work or school and clicking on connect to go through the enroll in Entra process, restart and sign in again as patch lab and to make sure that TPM is off, run dsregcmd /status:   
 ![TPM](./pictures/TPM.png)  
 Then do the same again for Prod and Pilot.  
+After that process go and check Devices in the Intune admin center to see correct sync: 
+![Sync](./pictures/sync.png)    
+Then its time to once again add WIN11-TEST to the Patch-Test group, and on WIN11-TEST go to Accounts -> Access work or school, click on the dropdown then Info and click on Sync:   
+![Status1](./pictures/sync.png) 
+Then wait a bit and go to Ring-Test and check Windows Updates in Devices for Ring-Test and should show: 
+![Status2](./pictures/status2.png)  
+Then click on view report and then click on device name:    
+![Report](./pictures/report.png)    
+On the Windows side go to Configured Policy updates and see the settings from Intune:   
+![Policy](./pictures/policy.png)    
+Then go back to Windows update and click resume updates and wait for it to check for a few minutes: 
+![Update1](./pictures/update1.webp) 
+And to prevent from updating to a newer OS version since this is patching run:  
+$k = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"  
+New-Item $k -Force | Out-Null   
+Set-ItemProperty $k TargetReleaseVersion 1 -Type DWord  
+Set-ItemProperty $k ProductVersion "Windows 11" -Type String    
+Set-ItemProperty $k TargetReleaseVersionInfo "24H2" -Type String    
+Restart-Service wuauserv    
+And if the new OS stays up select pause updates and run the Restart-Service wuauserv command again and click on resume updates: 
+![Run](./pictures/run.png)  
+Then wait for the updates to finish or get to a point to click on restart now.  
+After waiting:  
+![Update2](./pictures/update2.png)  
+And check winver to see the version:    
+![Version](./pictures/version.png)  
+And updates history:    
+![History3](./pictures/history3.png)    
+Since its up to date and the winver version is newer, pause updates for now while also checking in Event Viewer -> Application and Services -> Microsoft -> Windows -> WindowsUpdateClient -> Operational and verifying:    
+![Log](./pictures/log.png)  
+After pausing, its time to take a snapshot named patched and move on to the next VMs with the snapshot named patched.   
 
