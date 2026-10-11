@@ -1,6 +1,47 @@
 # intune-patch-management-lab
 
-Patch management is an important part within the lifecyle of a system since it shows compliance with standards, updates with the latest security features, and ensures against threats from attackers that might exploit previous vulnerabilites
+Patch-ring lab using three Windows 11 IoT Enterprise LTSC 2024 (evaluation) VMs
+in VirtualBox, enrolled in Microsoft Intune. It follows one patch cycle from an
+unpatched baseline to a patched, verified state, with two troubleshooting cases
+along the way.  
+
+## Results
+
+| VM | Ring | Before | After |
+|---|---|---|---|
+| WIN11-TEST | Ring-Test | 26100.1742 | 26100.9457 |
+| WIN11-PILOT | Ring-Pilot | 26100.1742 | 26100.9457 |
+| WIN11-PROD | Ring-Broad | 26100.1742 | 26100.9457 |
+
+Installed: 2026-09 Security Update (KB5129195) and 2026-09 .NET Framework
+Security Update (KB5126052). All three devices compliant in Intune.
+
+## Ring design
+
+| Setting | Test | Pilot | Broad |
+|---|---|---|---|
+| Quality update deferral | 0 days | 3 days | 7 days |
+| Quality update deadline | 1 day | 2 days | 2 days |
+| Grace period | 1 day | 1 day | 1 day |
+| Feature update deferral | 30 days | 30 days | 30 days |
+
+Devices stayed out of the ring groups until promotion. Adding a device to its
+group was the approval step, because deferrals count from each update's release
+date and the whole backlog was already past 7 days. 
+
+## What went wrong and how it was fixed
+
+- **Entra join lost on the VMs** (error 0xc0090016, "Device TPM problem"). Likely
+  cause was the virtual TPM. Fixed by setting TPM to None and rejoining with
+  software-backed keys. See [Patch Lifecycle](#patch-lifecycle).
+- **Stale WSUS policy** pointing at a dead server. The scan returned
+  ResultCode 3 with warning 0x80240438, and Intune still looked healthy. Fixed
+  by removing the three registry values, after which ResultCode was 2 with
+  0 warnings. See [Patch Lifecycle](#patch-lifecycle).
+- **Unwanted feature update:** 25H2 was offered despite the LTSC image. Pinned
+  to 24H2 with a local registry policy. 
+
+The full step-by-step build is below.      
 
 
 # Setup
