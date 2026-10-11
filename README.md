@@ -169,4 +169,32 @@ And output:
 ![Output2](./pictures/output2.png)  
 The hex value, when looking it up, says that this is a network connectivity issue despite finding updates. Hex value can also be found in Event Viewer as well within the WindowsUpdateClient:  
 ![Error2](./pictures/error2.png)    
+It seems the likely source is because of WSUS so lets run this: 
+$k = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"  
+Remove-ItemProperty $k -Name WUServer, WUStatusServer   
+Remove-ItemProperty "$k\AU" -Name UseWUServer   
+To remove WSUS stuff, then run to check:    
+$r = $s.CreateUpdateSearcher().Search("IsInstalled=0")  
+$r.ResultCode   
+$r.Warnings.Count   
+and see the result: 
+![Output3](./pictures/output3.png)  
+And confirm the current version PIN:    
+![Pin](./pictures/pin.png)  
+Now restart the VM add WIN11-PILOT to Patch Pilot and wait a few minutes and check profile settings:    
+![Test1](./pictures/test1.png)  
+And click on Sync in Work or school, then a few minutes then click sync again to get the rest of the settings like before:  
+![Settings](./pictures/settings.png)    
+Then go back to Windows updates and click on retry all to see the downloads pop up again    
+![Downloads](./pictures/downloads.png)  
+During this, get WIN11-PROD up and run the same 24H2 script:    
+![Script](./pictures/script.png)    
+Add Win11-PROD to Pilot-Broad, click sync in Prod and wait a few minutes for Ring-Broad to be change to success and for update policies to be changed to MDM like for the other VMs.    
+After going through the updates on WIN11-PILOT: 
+![Update3](./pictures/update3.png)  
+And after going through the updates on WIN11-PROD:  
+![Update4](./pictures/update4.png)  
+And for PILOT And Prod VMs, pause the updates
+And on Intune to check the Version and OS Build:    
+![Intune2](./pictures/intune2.png)  
 
