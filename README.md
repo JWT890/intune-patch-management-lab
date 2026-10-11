@@ -239,3 +239,24 @@ And for PILOT And Prod VMs, pause the updates
 And on Intune to check the Version and OS Build:    
 ![Intune2](./pictures/intune2.png)  
 
+# Conclusion
+
+This lab took three Windows 11 IoT Enterprise LTSC 2024 VMs from build
+26100.1742 to 26100.9457 using Intune update rings, with each device held out of
+its ring group until its turn. Along the way it showed that deferral settings
+only stagger updates when the updates are recent. Against a long backlog every
+ring installed immediately, so group membership was the real control. It also
+produced two troubleshooting cases: an Entra join that kept failing on cloned
+VMs, likely because of the virtual TPM, and a leftover WSUS policy that broke
+scanning while Intune still reported the device as healthy.
+
+Limitations: the lab used evaluation media, a single test user, and a 30-day
+trial tenant, and it ran for days rather than weeks, so ring timing was not
+tested against a fresh Patch Tuesday release.
+
+Next steps:
+- Run a fresh monthly release across the patched VMs to see the 0/3/7-day
+  deferrals stagger as designed
+- Add credentialed vulnerability scans (for example Nessus) before and after
+- Test expedited updates and rollback
+- Compare the same lifecycle in WSUS and Configuration Manager
